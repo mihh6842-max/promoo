@@ -62,3 +62,56 @@ async def broadcast_message(
 
     logger.info(f"Рассылка завершена: успешно={success}, ошибок={fail}")
     return success, fail
+
+
+async def send_new_promos_notification(users: List[User], new_promos: list) -> None:
+    """
+    Отправить уведомления о новых промокодах
+
+    Args:
+        users: Список пользователей для уведомления
+        new_promos: Список новых промокодов
+    """
+    from main import bot
+    from utils.animations import format_promocode_card
+
+    if not users or not new_promos:
+        logger.debug("Нет пользователей или промокодов для уведомлений")
+        return
+
+    # Ограничиваем количество промокодов в уведомлении
+    promos_to_notify = new_promos[:5]  # Максимум 5 промокодов
+
+    # Формируем сообщение
+    if len(new_promos) == 1:
+        message = "🆕 <b>Новый промокод!</b>\n\n"
+    else:
+        message = f"🆕 <b>Новые промокоды ({len(new_promos)})!</b>\n\n"
+
+    # Добавляем карточки промокодов
+    for i, promo in enumerate(promos_to_notify, 1):
+        message += f"<b>{i}.</b> "
+        message += format_promocode_card(promo, is_favorite=False)
+        if i < len(promos_to_notify):
+            message += "\n\n" + "─" * 30 + "\n\n"
+
+    # Если промокодов больше 5, добавляем сноску
+    if len(new_promos) > 5:
+        remaining = len(new_promos) - 5
+        message += f"\n\n... и еще {remaining} промокод(ов)!"
+
+    message += "\n\n📱 Откройте бота, чтобы увидеть все новые промокоды!"
+
+    # Отправляем уведомления
+    success, fail = await broadcast_message(
+        bot=bot,
+        users=users,
+        text=message,
+        parse_mode="HTML",
+        disable_notification=False
+    )
+
+    logger.info(
+        f"Уведомления о новых промокодах отправлены: "
+        f"успешно={success}, ошибок={fail}"
+    )
