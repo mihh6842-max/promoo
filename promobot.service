@@ -1,0 +1,19 @@
+[Unit]
+Description=PromoBot Telegram Bot
+After=network.target
+
+[Service]
+Type=simple
+User=YOUR_USERNAME
+WorkingDirectory=/path/to/promo-bot/host
+ExecStart=/usr/bin/python3 /path/to/promo-bot/host/main.py
+Restart=always
+RestartSec=10
+StandardOutput=append:/path/to/promo-bot/host/logs/systemd.log
+StandardError=append:/path/to/promo-bot/host/logs/systemd.log
+
+# Окружение (если нужно)
+Environment="PYTHONUNBUFFERED=1"
+
+[Install]
+WantedBy=multi-user.target
