@@ -1,0 +1,4 @@
+# Exclude Chrome/Playwright dependencies
+chromium
+chrome
+playwright

@@ -1,0 +1,8 @@
+version: "1"
+runtime: python-3.11
+build:
+  skip_chrome: true
+  skip_playwright: true
+dependencies:
+  system: []
+  python: requirements.txt
