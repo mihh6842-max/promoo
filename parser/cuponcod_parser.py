@@ -171,7 +171,7 @@ class CuponcodParser:
         """Извлечь настоящее название магазина со страницы"""
         try:
             content = await page.content()
-            soup = BeautifulSoup(content, 'lxml')
+            soup = BeautifulSoup(content, 'html.parser')
             
             # Пробуем несколько вариантов селекторов для названия магазина
             selectors = [
@@ -326,7 +326,7 @@ class CuponcodParser:
         try:
             await self._wait_for_page_load(page)
             content = await page.content()
-            soup = BeautifulSoup(content, 'lxml')
+            soup = BeautifulSoup(content, 'html.parser')
 
             # ПРАВИЛЬНЫЕ СЕЛЕКТОРЫ на основе реального HTML
             cards = soup.select('.wpsm_recent_posts_list .col_item')
@@ -562,7 +562,7 @@ class CuponcodParser:
         shop_urls = []
         try:
             content = await page.content()
-            soup = BeautifulSoup(content, 'lxml')
+            soup = BeautifulSoup(content, 'html.parser')
 
             # Ищем ссылки на магазины (dealstore)
             links = soup.select('a[href*="/dealstore/"]')
@@ -850,7 +850,7 @@ class SimpleCuponcodParser:
             response = await self.client.get(url)
             response.raise_for_status()
 
-            soup = BeautifulSoup(response.text, 'lxml')
+            soup = BeautifulSoup(response.text, 'html.parser')
 
             cards = soup.select('.wpsm_recent_posts_list .col_item')
 
@@ -892,7 +892,7 @@ class SimpleCuponcodParser:
 
             # Ищем ссылки на магазины
             response = await self.client.get(self.base_url)
-            soup = BeautifulSoup(response.text, 'lxml')
+            soup = BeautifulSoup(response.text, 'html.parser')
 
             shop_urls = []
             links = soup.select('a[href*="/dealstore/"]')
@@ -917,7 +917,7 @@ class SimpleCuponcodParser:
                     logger.info(f"[{i}/{min(self.max_shops, len(shop_urls))}] Парсинг: {shop_url}")
 
                     response = await self.client.get(shop_url)
-                    soup = BeautifulSoup(response.text, 'lxml')
+                    soup = BeautifulSoup(response.text, 'html.parser')
                     shop_name = self._extract_shop_name_from_html(soup, shop_url)
 
                     shop_promos = await self.parse_page_simple(shop_url, shop_name_override=shop_name)
