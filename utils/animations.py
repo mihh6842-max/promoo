@@ -96,3 +96,28 @@ def format_promocode_card(promo: "PromoCode", is_favorite: bool = False) -> str:
     parts.append(stats)
 
     return "\n".join(part for part in parts if part is not None)
+
+
+def format_stats_message(stats: dict) -> str:
+    """Форматирование сообщения статистики"""
+
+    text = "📊 <b>Статистика PromoBot</b>\n\n"
+
+    # Основные показатели
+    text += f"🎟 <b>Промокоды:</b>\n"
+    text += f"├ Всего активных: {stats['total_promos']}\n"
+    text += f"└ Новых: {stats['new_promos']}\n\n"
+
+    text += f"🏪 <b>Магазины:</b> {stats['total_shops']}\n\n"
+
+    text += f"👥 <b>Пользователи:</b>\n"
+    text += f"├ Всего: {stats['total_users']}\n"
+    text += f"└ Подписанных: {stats['subscribed_users']}\n"
+
+    # Топ магазинов
+    if stats.get('top_shops'):
+        text += f"\n\n🔥 <b>Топ-10 магазинов:</b>\n"
+        for i, (shop_name, count) in enumerate(stats['top_shops'], 1):
+            text += f"{i}. {shop_name}: {count} шт.\n"
+
+    return text
