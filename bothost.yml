@@ -3,6 +3,9 @@ runtime: python-3.11
 build:
   skip_chrome: true
   skip_playwright: true
+  commands:
+    - find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+    - find . -name "*.pyc" -delete 2>/dev/null || true
 dependencies:
   system: []
   python: requirements.txt
