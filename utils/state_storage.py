@@ -61,3 +61,4 @@ class BotStorage:
 
 # Глобальный экземпляр хранилища
 bot_storage = BotStorage()
+# Force cache clear
